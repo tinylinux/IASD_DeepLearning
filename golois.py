@@ -35,7 +35,7 @@ golois.getValidation (input_data, policy, value, end)
 
 input = keras.Input(shape=(19, 19, planes), name='board')
 x = layers.Conv2D(filters, 1, activation='relu', padding='same')(input)
-for i in range (5):
+for i in range (10):
     x = layers.Conv2D(filters, 3, activation='relu', padding='same')(x)
 policy_head = layers.Conv2D(1, 1, activation='relu', padding='same', use_bias = False, kernel_regularizer=regularizers.l2(0.0001))(x)
 policy_head = layers.Flatten()(policy_head)

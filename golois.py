@@ -39,7 +39,8 @@ for i in range (20):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x2 = layers.Conv2D(filters, 1, padding='same')(x)
-    x  = layers.Add(activation='relu')([x1,x2])
+    x  = layers.Add()([x1,x2])
+    x  = layers.ReLU()(x)
 policy_head = layers.Conv2D(1, 1, activation='relu', padding='same', use_bias = False, kernel_regularizer=regularizers.l2(0.0001))(x)
 policy_head = layers.Flatten()(policy_head)
 policy_head = layers.Activation('softmax', name='policy')(policy_head)

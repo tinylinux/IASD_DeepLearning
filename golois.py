@@ -10,7 +10,7 @@ import golois
 planes = 31
 moves = 361
 N = 10000
-epochs = 20
+epochs = 100
 batch = 128
 filters = 32
 

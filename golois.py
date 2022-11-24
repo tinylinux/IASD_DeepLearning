@@ -10,7 +10,7 @@ import golois
 planes = 31
 moves = 361
 N = 10000
-epochs = 500
+epochs = 300
 batch = 128
 filters = 32
 
@@ -35,7 +35,7 @@ golois.getValidation (input_data, policy, value, end)
 
 input = keras.Input(shape=(19, 19, planes), name='board')
 x = layers.Conv2D(filters, 1, activation='relu', padding='same')(input)
-for i in range (20):
+for i in range (25):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x2 = layers.Conv2D(filters, 1, padding='same')(x)

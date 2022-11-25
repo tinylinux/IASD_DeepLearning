@@ -38,6 +38,7 @@ x = layers.Conv2D(filters, 1, activation='relu', padding='same')(input)
 for i in range (25):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
+    x1 = layers.BatchNormalization()(x1)
     x2 = layers.Conv2D(filters, 1, padding='same')(x)
     x  = layers.Add()([x1,x2])
     x  = layers.ReLU()(x)
@@ -71,4 +72,4 @@ for i in range (1, epochs + 1):
         val = model.evaluate (input_data,
                               [policy, value], verbose = 0, batch_size=batch)
         print ("val =", val)
-        model.save ('RidaLali_V2-3.h5')
+        model.save ('RidaLali_V3.h5')

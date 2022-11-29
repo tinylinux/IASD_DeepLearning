@@ -40,7 +40,7 @@ input = keras.Input(shape=(19, 19, planes), name='board')
 x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0.0001))(input)
 x = layers.BatchNormalization()(x)
 x = layers.ReLU()(x)
-for i in range (25):
+for i in range (40):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)
@@ -69,15 +69,15 @@ model = keras.Model(inputs=input, outputs=[policy_head, value_head])
 
 model.summary ()
 
-model.compile(optimizer=keras.optimizers.Adagrad(learning_rate=1e-3),
+# model.compile(optimizer=keras.optimizers.Adagrad(learning_rate=1e-3),
+#               loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
+#               loss_weights={'policy' : 1.0, 'value' : 1.0},
+#               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
+
+model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.001, momentum=0.9),
               loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
               loss_weights={'policy' : 1.0, 'value' : 1.0},
               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
-
-# model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.0005, momentum=0.9),
-#              loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
-#              loss_weights={'policy' : 1.0, 'value' : 1.0},
-#              metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
 
 for i in range (1, epochs + 1):
     print ('epoch ' + str (i))

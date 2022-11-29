@@ -10,7 +10,7 @@ import golois
 planes = 31
 moves = 361
 N = 10000
-epochs = 300
+epochs = 200
 batch = 128
 # filters = 32
 filters = 512
@@ -40,7 +40,7 @@ input = keras.Input(shape=(19, 19, planes), name='board')
 x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0.0001))(input)
 x = layers.BatchNormalization()(x)
 x = layers.ReLU()(x)
-for i in range (40):
+for i in range (30):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)

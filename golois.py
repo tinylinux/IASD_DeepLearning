@@ -51,7 +51,7 @@ for i in range (10):
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     x = layers.Add()([m,x])
-for i in range(30):
+for i in range(20):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x1 = layers.BatchNormalization()(x1)

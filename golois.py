@@ -13,7 +13,7 @@ N = 10000
 epochs = 200
 batch = 128
 # filters = 32
-filters = 32
+filters = 40
 trunk = 32
 
 input_data = np.random.randint(2, size=(N, 19, 19, planes))
@@ -51,7 +51,7 @@ for i in range (60):
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     x = layers.Add()([m,x])
-for i in range(0):
+for i in range(10):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x1 = layers.BatchNormalization()(x1)

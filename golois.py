@@ -40,7 +40,7 @@ input = keras.Input(shape=(19, 19, planes), name='board')
 x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0.0001))(input)
 x = layers.BatchNormalization()(x)
 x = layers.ReLU()(x)
-for i in range (65):
+for i in range (70):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)
@@ -48,10 +48,10 @@ for i in range (65):
     m = layers.DepthwiseConv2D((3,3), padding='same', kernel_regularizer=regularizers.l2(1e-4),use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     m = layers.Activation('relu')(m)
-    m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
-    m = layers.BatchNormalization()(m)
+    x = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
+    x = layers.BatchNormalization()(x)
     x = layers.Add()([m,x])
-for i in range(10):
+for i in range(1):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x1 = layers.BatchNormalization()(x1)
@@ -75,7 +75,7 @@ model.summary ()
 #               loss_weights={'policy' : 1.0, 'value' : 1.0},
 #               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
 
-model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.001, momentum=0.9),
+model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.0005, momentum=0.9),
               loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
               loss_weights={'policy' : 1.0, 'value' : 1.0},
               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
@@ -93,4 +93,4 @@ for i in range (1, epochs + 1):
         val = model.evaluate (input_data,
                               [policy, value], verbose = 0, batch_size=batch)
         print ("val =", val)
-        model.save ('RidaLali_V3-3.h5')
+        model.save ('RidaLali_V3-4.h5')

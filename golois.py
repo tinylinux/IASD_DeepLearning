@@ -40,7 +40,7 @@ input = keras.Input(shape=(19, 19, planes), name='board')
 x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0.0001))(input)
 x = layers.BatchNormalization()(x)
 x = layers.ReLU()(x)
-for i in range (100):
+for i in range (0):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)
@@ -51,7 +51,7 @@ for i in range (100):
     x = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     x = layers.BatchNormalization()(x)
     x = layers.Add()([m,x])
-for i in range(0):
+for i in range(100):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x1 = layers.BatchNormalization()(x1)
@@ -75,7 +75,7 @@ model.summary ()
 #               loss_weights={'policy' : 1.0, 'value' : 1.0},
 #               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
 
-model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.0005, momentum=0.9),
+model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.001, momentum=0.9),
               loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
               loss_weights={'policy' : 1.0, 'value' : 1.0},
               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})

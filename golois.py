@@ -14,7 +14,7 @@ epochs = 350
 batch = 128
 # filters = 32
 filters = 40
-trunk = 32
+trunk = 40
 
 input_data = np.random.randint(2, size=(N, 19, 19, planes))
 input_data = input_data.astype ('float32')

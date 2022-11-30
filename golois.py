@@ -51,7 +51,7 @@ x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0
 x = layers.BatchNormalization()(x)
 x = activations.swish(x)
 #x = layers.ReLU()(x)
-for i in range (100):
+for i in range (50):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)

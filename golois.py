@@ -71,7 +71,7 @@ for i in range(0):
     x  = layers.Add()([x1,x2])
     x  = layers.ReLU()(x)
 
-x = SE_Block(x, filters)
+#x = SE_Block(x, filters)
 policy_head = layers.Conv2D(1, 1, activation='relu', padding='same', use_bias = False, kernel_regularizer=regularizers.l2(0.0001))(x)
 policy_head = layers.Flatten()(policy_head)
 policy_head = layers.Activation('softmax', name='policy')(policy_head)

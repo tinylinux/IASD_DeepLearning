@@ -40,12 +40,14 @@ input = keras.Input(shape=(19, 19, planes), name='board')
 # x = layers.Conv2D(filters, 1, activation='relu', padding='same')(input)
 x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0.0001))(input)
 x = layers.BatchNormalization()(x)
-x = layers.ReLU()(x)
-for i in range (50):
+x1 = activations.sigmoid(x)
+x = layers.Multiply()([x,x1])
+for i in range (60):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)
-    m = layers.Activation('relu')(m)
+    m1 = activations.sigmoid(m)
+    m = layers.Multiply()([m,m1])
     m = layers.DepthwiseConv2D((3,3), padding='same', kernel_regularizer=regularizers.l2(1e-4),use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     m1 = activations.sigmoid(m)
@@ -96,4 +98,4 @@ for i in range (1, epochs + 1):
         val = model.evaluate (input_data,
                               [policy, value], verbose = 0, batch_size=batch)
         print ("val =", val)
-        model.save ('RidaLali_V3-4.h5')
+        model.save ('RidaLali_V3-5.h5')

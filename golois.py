@@ -17,7 +17,7 @@ def SE_Block(t, filters, ratio=16):
     x = layers.Multiply()([t,se])
     return x
 
-planes = 31
+planes = 64
 moves = 361
 N = 10000
 epochs = 300

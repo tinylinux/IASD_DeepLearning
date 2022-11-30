@@ -48,8 +48,8 @@ for i in range (50):
     m = layers.DepthwiseConv2D((3,3), padding='same', kernel_regularizer=regularizers.l2(1e-4),use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     m = layers.Activation('relu')(m)
-    x = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
-    x = layers.BatchNormalization()(x)
+    m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
+    m = layers.BatchNormalization()(m)
     x = layers.Add()([m,x])
 for i in range(0):
     # Residual Way

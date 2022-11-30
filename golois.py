@@ -3,6 +3,7 @@ import tensorflow.keras as keras
 import numpy as np
 from tensorflow.keras import layers
 from tensorflow.keras import regularizers
+from tensorflow.keras import activations
 import gc
 
 import golois
@@ -47,7 +48,9 @@ for i in range (50):
     m = layers.Activation('relu')(m)
     m = layers.DepthwiseConv2D((3,3), padding='same', kernel_regularizer=regularizers.l2(1e-4),use_bias=False)(m)
     m = layers.BatchNormalization()(m)
-    m = layers.Activation('relu')(m)
+    m1 = activations.sigmoid(m)
+    m = layers.Multiply()([m,m1])
+    #m = layers.Activation('relu')(m)
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     x = layers.Add()([m,x])

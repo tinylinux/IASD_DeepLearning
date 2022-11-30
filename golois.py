@@ -17,7 +17,7 @@ def SE_Block(t, filters, ratio=16):
     x = layers.Multiply()([t,se])
     return x
 
-planes = 64
+planes = 31
 moves = 361
 N = 10000
 epochs = 300
@@ -54,14 +54,13 @@ for i in range (70):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)
-    m = layers.Activation('silu')(m)
+    m = layers.ReLU()(m)
     m = layers.DepthwiseConv2D((3,3), padding='same', kernel_regularizer=regularizers.l2(1e-4),use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     m = layers.Activation('silu')(m)
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(x)
     x = layers.Add()([m,x])
-    x = layers.Activation('silu')(x)
 for i in range(0):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)

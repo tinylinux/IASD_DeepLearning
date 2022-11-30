@@ -49,21 +49,19 @@ input = keras.Input(shape=(19, 19, planes), name='board')
 # x = layers.Conv2D(filters, 1, activation='relu', padding='same')(input)
 x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0.0001))(input)
 x = layers.BatchNormalization()(x)
-x = activations.swish(x)
-#x = layers.ReLU()(x)
-for i in range (50):
+x = layers.Activation('silu')(x)
+for i in range (70):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)
-    m = layers.Activation('relu')(m)
+    m = layers.Activation('silu')(m)
     m = layers.DepthwiseConv2D((3,3), padding='same', kernel_regularizer=regularizers.l2(1e-4),use_bias=False)(m)
     m = layers.BatchNormalization()(m)
-    #m = layers.Activation('relu')(m)
-    m = activations.swish(m)
+    m = layers.Activation('silu')(m)
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(x)
     x = layers.Add()([m,x])
-
+    x = layers.Activation('silu')(x)
 for i in range(0):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)

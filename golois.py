@@ -3,9 +3,19 @@ import tensorflow.keras as keras
 import numpy as np
 from tensorflow.keras import layers
 from tensorflow.keras import regularizers
+from tensorflow.keras import activations
 import gc
 
 import golois
+
+def SE_Block(t, filters, ratio=16):
+    se_shape = (1,1,filters)
+    se = layers.GlobalAveragePooling2D()(t)
+    se = layers.Reshape(se_shape)(se)
+    se = layers.Dense(filters//ratio, activation='relu', use_bias=False)(se)
+    se = layers.Dense(filters, activation='sigmoid', use_bias=False)(se)
+    x = layers.Multiply()([t,se])
+    return x
 
 planes = 31
 moves = 361
@@ -47,10 +57,12 @@ for i in range (100):
     m = layers.Activation('relu')(m)
     m = layers.DepthwiseConv2D((3,3), padding='same', kernel_regularizer=regularizers.l2(1e-4),use_bias=False)(m)
     m = layers.BatchNormalization()(m)
-    m = layers.Activation('relu')(m)
+    #m = layers.Activation('relu')(m)
+    m = activations.swish(m)
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(x)
     x = layers.Add()([m,x])
+
 for i in range(0):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
@@ -58,6 +70,8 @@ for i in range(0):
     x2 = layers.Conv2D(filters, 1, padding='same')(x)
     x  = layers.Add()([x1,x2])
     x  = layers.ReLU()(x)
+
+x = SE_Block(x, filters)
 policy_head = layers.Conv2D(1, 1, activation='relu', padding='same', use_bias = False, kernel_regularizer=regularizers.l2(0.0001))(x)
 policy_head = layers.Flatten()(policy_head)
 policy_head = layers.Activation('softmax', name='policy')(policy_head)

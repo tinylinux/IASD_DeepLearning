@@ -3,28 +3,18 @@ import tensorflow.keras as keras
 import numpy as np
 from tensorflow.keras import layers
 from tensorflow.keras import regularizers
-from tensorflow.keras import activations
 import gc
 
 import golois
 
-def SE_Block(t, filters, ratio=16):
-    se_shape = (1,1,filters)
-    se = layers.GlobalAveragePooling2D()(t)
-    se = layers.Reshape(se_shape)(se)
-    se = layers.Dense(filters//ratio, activation='relu', use_bias=False)(se)
-    se = layers.Dense(filters, activation='sigmoid', use_bias=False)(se)
-    x = layers.Multiply()([t,se])
-    return x
-
 planes = 31
 moves = 361
 N = 10000
-epochs = 300
+epochs = 200
 batch = 128
 # filters = 32
 filters = 40
-trunk = 16
+trunk = 40
 
 input_data = np.random.randint(2, size=(N, 19, 19, planes))
 input_data = input_data.astype ('float32')
@@ -49,27 +39,25 @@ input = keras.Input(shape=(19, 19, planes), name='board')
 # x = layers.Conv2D(filters, 1, activation='relu', padding='same')(input)
 x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0.0001))(input)
 x = layers.BatchNormalization()(x)
-x = layers.Activation('silu')(x)
+x = layers.ReLU()(x)
 for i in range (70):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)
-    m = layers.ReLU()(m)
+    m = layers.Activation('relu')(m)
     m = layers.DepthwiseConv2D((3,3), padding='same', kernel_regularizer=regularizers.l2(1e-4),use_bias=False)(m)
     m = layers.BatchNormalization()(m)
-    m = layers.Activation('silu')(m)
-    m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
-    m = layers.BatchNormalization()(x)
+    m = layers.Activation('relu')(m)
+    x = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
+    x = layers.BatchNormalization()(x)
     x = layers.Add()([m,x])
-for i in range(0):
+for i in range(10):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x1 = layers.BatchNormalization()(x1)
     x2 = layers.Conv2D(filters, 1, padding='same')(x)
     x  = layers.Add()([x1,x2])
     x  = layers.ReLU()(x)
-
-#x = SE_Block(x, filters)
 policy_head = layers.Conv2D(1, 1, activation='relu', padding='same', use_bias = False, kernel_regularizer=regularizers.l2(0.0001))(x)
 policy_head = layers.Flatten()(policy_head)
 policy_head = layers.Activation('softmax', name='policy')(policy_head)

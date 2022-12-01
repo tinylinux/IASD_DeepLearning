@@ -14,8 +14,8 @@ N = 10000
 epochs = 350
 batch = 128
 # filters = 32
-filters = 32
-trunk = 32
+filters = 64
+trunk = 42
 
 input_data = np.random.randint(2, size=(N, 19, 19, planes))
 input_data = input_data.astype ('float32')
@@ -56,6 +56,9 @@ for i in range (60):
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     x = layers.Add()([m,x])
+    if i % 5 == 0:
+        filters -= 1
+        trunk -= 1
 for i in range(0):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
@@ -98,4 +101,4 @@ for i in range (1, epochs + 1):
         val = model.evaluate (input_data,
                               [policy, value], verbose = 0, batch_size=batch)
         print ("val =", val)
-        model.save ('RidaLali_V3-5.h5')
+        model.save ('RidaLali_V3-6.h5')

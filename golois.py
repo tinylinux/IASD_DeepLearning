@@ -42,7 +42,7 @@ x = layers.Conv2D(trunk, 1, padding='same', kernel_regularizer=regularizers.l2(0
 x = layers.BatchNormalization()(x)
 x1 = activations.sigmoid(x)
 x = layers.Multiply()([x,x1])
-for i in range (60):
+for i in range (12):
     # Mobile Net Way
     m = layers.Conv2D(filters, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(x)
     m = layers.BatchNormalization()(m)
@@ -80,7 +80,7 @@ model.summary ()
 #               loss_weights={'policy' : 1.0, 'value' : 1.0},
 #               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
 
-model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.001, momentum=0.9),
+model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001),
               loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
               loss_weights={'policy' : 1.0, 'value' : 1.0},
               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
@@ -98,4 +98,4 @@ for i in range (1, epochs + 1):
         val = model.evaluate (input_data,
                               [policy, value], verbose = 0, batch_size=batch)
         print ("val =", val)
-        model.save ('RidaLali_V3-6.h5')
+        model.save ('RidaLali_V4.h5')

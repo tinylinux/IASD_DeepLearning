@@ -15,7 +15,7 @@ epochs = 350
 batch = 128
 # filters = 32
 filters = 64
-trunk = 42
+trunk = 32
 
 input_data = np.random.randint(2, size=(N, 19, 19, planes))
 input_data = input_data.astype ('float32')
@@ -56,14 +56,15 @@ for i in range (12):
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     x = layers.Add()([m,x])
-for i in range(0):
+for i in range(1):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x1 = layers.BatchNormalization()(x1)
     x2 = layers.Conv2D(filters, 1, padding='same')(x)
     x  = layers.Add()([x1,x2])
     x  = layers.ReLU()(x)
-policy_head = layers.Conv2D(1, 1, activation='relu', padding='same', use_bias = False, kernel_regularizer=regularizers.l2(0.0001))(x)
+    #activation='relu',
+policy_head = layers.Conv2D(1, 1,  padding='same', use_bias = False, kernel_regularizer=regularizers.l2(0.0001))(x)
 policy_head = layers.Flatten()(policy_head)
 policy_head = layers.Activation('softmax', name='policy')(policy_head)
 value_head = layers.Conv2D(1, 1, activation='relu', padding='same', use_bias = False, kernel_regularizer=regularizers.l2(0.0001))(x)
@@ -98,4 +99,4 @@ for i in range (1, epochs + 1):
         val = model.evaluate (input_data,
                               [policy, value], verbose = 0, batch_size=batch)
         print ("val =", val)
-        model.save ('RidaLali_V4.h5')
+        model.save ('RidaLali_V4-2.h5')

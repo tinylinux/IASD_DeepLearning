@@ -81,7 +81,7 @@ model.summary ()
 #               loss_weights={'policy' : 1.0, 'value' : 1.0},
 #               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
 
-model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001, beta1=0.92, beta2=0.9991),
+model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001, beta_1=0.92, beta_2=0.9991),
               loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
               loss_weights={'policy' : 1.0, 'value' : 1.0},
               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})

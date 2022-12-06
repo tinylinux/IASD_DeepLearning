@@ -99,4 +99,4 @@ for i in range (1, epochs + 1):
         val = model.evaluate (input_data,
                               [policy, value], verbose = 0, batch_size=batch)
         print ("val =", val)
-        model.save ('RidaLali_V4-2.h5')
+        model.save ('RidaLali_V5-1.h5')

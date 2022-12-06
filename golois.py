@@ -11,11 +11,11 @@ import golois
 planes = 31
 moves = 361
 N = 10000
-epochs = 350
+epochs = 1000
 batch = 128
 # filters = 32
-filters = 64
-trunk = 32
+filters = 48
+trunk = 24
 
 input_data = np.random.randint(2, size=(N, 19, 19, planes))
 input_data = input_data.astype ('float32')
@@ -56,7 +56,7 @@ for i in range (12):
     m = layers.Conv2D(trunk, (1,1), kernel_regularizer=regularizers.l2(1e-4), use_bias=False)(m)
     m = layers.BatchNormalization()(m)
     x = layers.Add()([m,x])
-for i in range(1):
+for i in range(0):
     # Residual Way
     x1 = layers.Conv2D(filters, 5, padding='same')(x)
     x1 = layers.BatchNormalization()(x1)
@@ -81,7 +81,7 @@ model.summary ()
 #               loss_weights={'policy' : 1.0, 'value' : 1.0},
 #               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
 
-model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001),
+model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001, beta1=0.92, beta2=0.9991),
               loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
               loss_weights={'policy' : 1.0, 'value' : 1.0},
               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})

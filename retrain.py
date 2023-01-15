@@ -36,7 +36,7 @@ print ("getValidation", flush = True)
 golois.getValidation (input_data, policy, value, end)
 
 
-model = keras.models.load_model("RidaLali_V5-4-2.h5")
+model = keras.models.load_model("RidaLali_V6-2.h5")
 
 model.summary ()
 
@@ -63,4 +63,4 @@ for i in range (1, epochs + 1):
         val = model.evaluate (input_data,
                               [policy, value], verbose = 0, batch_size=batch)
         print ("val =", val)
-        model.save ('RidaLali_V5-4-2.h5')
+        model.save ('RidaLali_V6-2-1.h5')
